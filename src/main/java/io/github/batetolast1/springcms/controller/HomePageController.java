@@ -19,8 +19,8 @@ public class HomePageController {
 
     @GetMapping
     public String home(Model model) {
-        List<ArticleDto> articles = articleService.getLastArticles();
-        model.addAttribute("lastArticles", articles);
+        List<ArticleDto> articleDtos = articleService.getLastArticles();
+        model.addAttribute("articleDtos", articleDtos);
         return "index";
     }
 }

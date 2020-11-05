@@ -6,6 +6,9 @@
     <title>Spring CMS - home page</title>
 </head>
 <body>
+
+    <c:import url="fragments/header.jsp"/>
+
     <table>
         <tr>
             <th>Id</th>
@@ -13,14 +16,15 @@
             <th>Content</th>
             <th>Created on</th>
         </tr>
-        <c:forEach var="article" items="${lastArticles}" varStatus="index">
+        <c:forEach var="article" items="${articleDtos}" varStatus="index">
             <tr>
-                <td>${index.index + 1}</td>
-                <td>${article.title}</td>
-                <td>${article.content}</td>
-                <td>${article.createdOn}</td>
+                <td><c:out value="${index.index + 1}"/></td>
+                <td><c:out value="${article.title}"/></td>
+                <td><c:out value="${article.content}"/></td>
+                <td><c:out value="${article.createdOn}"/></td>
             </tr>
         </c:forEach>
     </table>
+
 </body>
 </html>
