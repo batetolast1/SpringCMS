@@ -43,4 +43,10 @@ public class DefaultArticleDao implements ArticleDao {
         TypedQuery<Article> query = entityManager.createQuery("SELECT a FROM Article a", Article.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Article> findFirst5ByOrderByCreatedOnDesc() {
+        TypedQuery<Article> query = entityManager.createQuery("SELECT a FROM Article a ORDER BY a.createdOn DESC", Article.class);
+        return query.setMaxResults(5).getResultList();
+    }
 }
