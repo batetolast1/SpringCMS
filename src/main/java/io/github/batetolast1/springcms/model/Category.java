@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "categories")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class Category extends BaseEntity {
 
     @Column(columnDefinition = "VARCHAR(100) UNIQUE")

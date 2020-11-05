@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "authors")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class Author extends BaseEntity {
 
     @Column(name = "first_name", nullable = false)
