@@ -4,59 +4,67 @@ CREATE DATABASE spring_cms
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-create table article_categories
+CREATE TABLE article_categories
 (
-    article_id  bigint not null,
-    category_id bigint not null
-) engine = InnoDB;
+    article_id  bigint NOT NULL,
+    category_id bigint NOT NULL
+) ENGINE = InnoDB;
 
-create table articles
+
+CREATE TABLE articles
 (
-    id         bigint not null auto_increment,
+    id         bigint NOT NULL AUTO_INCREMENT,
     created_on datetime(6),
     updated_on datetime(6),
     content    TEXT,
     title      varchar(200),
     author_id  bigint,
-    primary key (id)
-) engine = InnoDB;
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
 
-create table authors
+
+CREATE TABLE authors
 (
-    id         bigint       not null auto_increment,
+    id         bigint       NOT NULL AUTO_INCREMENT,
     created_on datetime(6),
     updated_on datetime(6),
-    first_name varchar(255) not null,
-    last_name  varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
+    first_name varchar(255) NOT NULL,
+    last_name  varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
 
-create table categories
+
+CREATE TABLE categories
 (
-    id          bigint not null auto_increment,
+    id          bigint NOT NULL AUTO_INCREMENT,
     created_on  datetime(6),
     updated_on  datetime(6),
     description varchar(255),
     name        VARCHAR(100) UNIQUE,
-    primary key (id)
-) engine = InnoDB;
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
 
-alter table article_categories
-    add constraint FK8lwbpiccld0fsuhw5xab62vl0 foreign key (category_id) references categories (id);
 
-alter table article_categories
-    add constraint FKiaa1jged75v2k1r2ongjm9hko foreign key (article_id) references articles (id);
+ALTER TABLE article_categories
+    ADD CONSTRAINT FK8lwbpiccld0fsuhw5xab62vl0
+        FOREIGN KEY (category_id) REFERENCES categories (id);
 
-alter table articles
-    add constraint FKglvhv5e43dmjhmiovwhcax7aq foreign key (author_id) references authors (id);
 
+ALTER TABLE article_categories
+    ADD CONSTRAINT FKiaa1jged75v2k1r2ongjm9hko
+        FOREIGN KEY (article_id) REFERENCES articles (id);
+
+
+ALTER TABLE articles
+    ADD CONSTRAINT FKglvhv5e43dmjhmiovwhcax7aq
+        FOREIGN KEY (author_id) REFERENCES authors (id);
 
 INSERT INTO authors(created_on, first_name, last_name)
 VALUES (NOW(), 'Adam', 'Anthem'),
        (NOW(), 'Ben', 'Bobbins'),
        (NOW(), 'Cedric', 'Corgi');
 
-INSERT INTO categories(created_on, description, name)
+INSERT INTO categories(created_on, name, description)
 VALUES (NOW(), 'sport', 'news about sport events'),
        (NOW(), 'politics', 'things that really matter'),
        (NOW(), 'health', 'it\'s all about covid now');
