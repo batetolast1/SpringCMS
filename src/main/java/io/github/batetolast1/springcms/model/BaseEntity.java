@@ -18,4 +18,15 @@ public class BaseEntity {
     private LocalDateTime createdOn;
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdOn = LocalDateTime.now();
+        this.updatedOn = null;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedOn = LocalDateTime.now();
+    }
 }

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -39,8 +39,10 @@ public class DefaultAuthorDao implements AuthorDao {
     }
 
     @Override
-    public List<Author> findAll() {
-        TypedQuery<Author> query = entityManager.createQuery("SELECT a FROM Author a", Author.class);
-        return query.getResultList();
+    public Set<Author> findAll() {
+        return entityManager
+                .createQuery("SELECT a FROM Author a", Author.class)
+                .getResultStream()
+                .collect(Collectors.toSet());
     }
 }

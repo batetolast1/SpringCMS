@@ -2,11 +2,11 @@ package io.github.batetolast1.springcms.service;
 
 import io.github.batetolast1.springcms.dto.CategoryDto;
 
-import java.util.List;
+import java.util.Set;
 
 public interface CategoryService {
 
-    List<CategoryDto> getAll();
+    Set<CategoryDto> getAll();
 
     void delete(Long id);
 

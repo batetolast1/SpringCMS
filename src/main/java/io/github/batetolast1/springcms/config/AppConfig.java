@@ -1,10 +1,16 @@
 package io.github.batetolast1.springcms.config;
 
+import io.github.batetolast1.springcms.converter.AuthorDtoConverter;
+import io.github.batetolast1.springcms.converter.CategoryDtoConverter;
+import io.github.batetolast1.springcms.dto.ArticleDto;
+import io.github.batetolast1.springcms.model.Article;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -60,6 +66,31 @@ public class AppConfig implements WebMvcConfigurer {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        TypeMap<Article, ArticleDto> articleToArticleDtoTypeMap = modelMapper.createTypeMap(Article.class, ArticleDto.class);
+        articleToArticleDtoTypeMap.addMapping(Article::getAuthor, ArticleDto::setAuthorDto);
+        articleToArticleDtoTypeMap.addMapping(Article::getCategorySet, ArticleDto::setCategoryDtos);
+
+        TypeMap<ArticleDto, Article> articleDtoToArticleTypeMap = modelMapper.createTypeMap(ArticleDto.class, Article.class);
+        articleDtoToArticleTypeMap.addMapping(ArticleDto::getAuthorDto, Article::setAuthor);
+        articleDtoToArticleTypeMap.addMapping(ArticleDto::getCategoryDtos, Article::setCategorySet);
+
         return modelMapper;
+    }
+
+    @Bean
+    public AuthorDtoConverter authorDtoConverter() {
+        return new AuthorDtoConverter();
+    }
+
+    @Bean
+    public CategoryDtoConverter categoryDtoConverter() {
+        return new CategoryDtoConverter();
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(authorDtoConverter());
+        registry.addConverter(categoryDtoConverter());
     }
 }

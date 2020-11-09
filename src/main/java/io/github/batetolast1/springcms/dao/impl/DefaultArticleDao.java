@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -39,14 +41,19 @@ public class DefaultArticleDao implements ArticleDao {
     }
 
     @Override
-    public List<Article> findAll() {
-        TypedQuery<Article> query = entityManager.createQuery("SELECT a FROM Article a", Article.class);
-        return query.getResultList();
+    public Set<Article> findAll() {
+        return entityManager
+                .createQuery("SELECT a FROM Article a", Article.class)
+                .getResultStream()
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<Article> findFirst5ByOrderByCreatedOnDesc() {
-        TypedQuery<Article> query = entityManager.createQuery("SELECT a FROM Article a ORDER BY a.createdOn DESC", Article.class);
-        return query.setMaxResults(5).getResultList();
+    public Set<Article> findFirst5ByOrderByCreatedOnDesc() {
+        return entityManager
+                .createQuery("SELECT a FROM Article a ORDER BY a.createdOn DESC", Article.class)
+                .setMaxResults(5)
+                .getResultStream()
+                .collect(Collectors.toSet());
     }
 }

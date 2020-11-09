@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -39,8 +39,9 @@ public class DefaultCategoryDao implements CategoryDao {
     }
 
     @Override
-    public List<Category> findAll() {
-        TypedQuery<Category> query = entityManager.createQuery("SELECT c FROM Category c", Category.class);
-        return query.getResultList();
+    public Set<Category> findAll() {
+        return entityManager.createQuery("SELECT c FROM Category c", Category.class)
+                .getResultStream()
+                .collect(Collectors.toSet());
     }
 }

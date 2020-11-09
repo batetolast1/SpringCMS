@@ -1,6 +1,6 @@
 package io.github.batetolast1.springcms.dao;
 
-import java.util.List;
+import java.util.Set;
 
 public interface BaseDao<T, ID> {
 
@@ -12,5 +12,5 @@ public interface BaseDao<T, ID> {
 
     void delete(ID var);
 
-    List<T> findAll();
+    Set<T> findAll();
 }

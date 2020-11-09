@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -19,7 +19,7 @@ public class HomePageController {
 
     @GetMapping
     public String home(Model model) {
-        List<ArticleDto> articleDtos = articleService.getLastArticles();
+        Set<ArticleDto> articleDtos = articleService.getLastArticles();
         model.addAttribute("articleDtos", articleDtos);
         return "index";
     }

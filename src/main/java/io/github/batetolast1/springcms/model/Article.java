@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "articles")
@@ -24,7 +24,7 @@ public class Article extends BaseEntity {
     @JoinTable(name = "article_categories",
             joinColumns = @JoinColumn(name = "article_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categoryList = new ArrayList<>();
+    private Set<Category> categorySet = new HashSet<>();
 
     @Column(columnDefinition = "TEXT")
     private String content;

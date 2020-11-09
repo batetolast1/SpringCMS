@@ -2,9 +2,19 @@ package io.github.batetolast1.springcms.service;
 
 import io.github.batetolast1.springcms.dto.ArticleDto;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ArticleService {
 
-    List<ArticleDto> getLastArticles();
+    Set<ArticleDto> getLastArticles();
+
+    Set<ArticleDto> getAll();
+
+    void delete(Long id);
+
+    void save(ArticleDto articleDto);
+
+    ArticleDto getById(Long id);
+
+    void edit(ArticleDto articleDto);
 }

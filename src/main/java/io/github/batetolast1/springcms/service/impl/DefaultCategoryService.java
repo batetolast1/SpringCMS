@@ -7,11 +7,13 @@ import io.github.batetolast1.springcms.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DefaultCategoryService implements CategoryService {
 
@@ -19,12 +21,12 @@ public class DefaultCategoryService implements CategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto> getAll() {
+    public Set<CategoryDto> getAll() {
         return categoryDao
                 .findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, CategoryDto.class))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override

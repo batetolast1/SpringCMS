@@ -2,11 +2,11 @@ package io.github.batetolast1.springcms.service;
 
 import io.github.batetolast1.springcms.dto.AuthorDto;
 
-import java.util.List;
+import java.util.Set;
 
 public interface AuthorService {
 
-    List<AuthorDto> getAll();
+    Set<AuthorDto> getAll();
 
     void delete(Long id);
 
