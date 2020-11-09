@@ -9,7 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +22,13 @@ public class DefaultAuthorService implements AuthorService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Set<AuthorDto> getAll() {
+    public List<AuthorDto> getAll() {
         return authorDao
                 .findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, AuthorDto.class))
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(AuthorDto::getFullName))
+                .collect(Collectors.toList());
     }
 
     @Override

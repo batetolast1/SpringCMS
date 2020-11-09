@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,11 +48,10 @@ public class DefaultArticleDao implements ArticleDao {
     }
 
     @Override
-    public Set<Article> findFirst5ByOrderByCreatedOnDesc() {
+    public List<Article> findFirst5ByOrderByCreatedOnDesc() {
         return entityManager
                 .createQuery("SELECT a FROM Article a ORDER BY a.createdOn DESC", Article.class)
                 .setMaxResults(5)
-                .getResultStream()
-                .collect(Collectors.toSet());
+                .getResultList();
     }
 }

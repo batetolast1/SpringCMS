@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,21 +23,22 @@ public class DefaultArticleService implements ArticleService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Set<ArticleDto> getLastArticles() {
+    public List<ArticleDto> getLastArticles() {
         return articleDao
                 .findFirst5ByOrderByCreatedOnDesc()
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<ArticleDto> getAll() {
+    public List<ArticleDto> getAll() {
         return articleDao
                 .findAll()
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(ArticleDto::getCreatedOn))
+                .collect(Collectors.toList());
     }
 
     @Override

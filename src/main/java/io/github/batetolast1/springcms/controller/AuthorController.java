@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Set;
+import java.util.List;
 
 @Controller
 @RequestMapping("/author")
@@ -21,7 +21,7 @@ public class AuthorController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        Set<AuthorDto> authorDtos = authorService.getAll();
+        List<AuthorDto> authorDtos = authorService.getAll();
         model.addAttribute("authorDtos", authorDtos);
         return "author/list";
     }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Set;
+import java.util.List;
 
 @Controller
 @RequestMapping("/category")
@@ -21,7 +21,7 @@ public class CategoryController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        Set<CategoryDto> categoryDtos = categoryService.getAll();
+        List<CategoryDto> categoryDtos = categoryService.getAll();
         model.addAttribute("categoryDtos", categoryDtos);
         return "category/list";
     }

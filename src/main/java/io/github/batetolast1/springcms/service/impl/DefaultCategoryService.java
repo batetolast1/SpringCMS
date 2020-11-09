@@ -9,7 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +22,13 @@ public class DefaultCategoryService implements CategoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Set<CategoryDto> getAll() {
+    public List<CategoryDto> getAll() {
         return categoryDao
                 .findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, CategoryDto.class))
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(CategoryDto::getName))
+                .collect(Collectors.toList());
     }
 
     @Override

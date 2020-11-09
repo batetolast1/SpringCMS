@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Controller
 @RequestMapping("/article")
@@ -23,18 +23,18 @@ public class ArticleController {
     private final CategoryService categoryService;
 
     @ModelAttribute("authorDtos")
-    public Set<AuthorDto> authorDtos() {
+    public List<AuthorDto> authorDtos() {
         return authorService.getAll();
     }
 
     @ModelAttribute("categoryDtos")
-    public Set<CategoryDto> categoryDtos() {
+    public List<CategoryDto> categoryDtos() {
         return categoryService.getAll();
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        Set<ArticleDto> articleDtos = articleService.getAll();
+        List<ArticleDto> articleDtos = articleService.getAll();
         model.addAttribute("articleDtos", articleDtos);
         return "article/list";
     }
