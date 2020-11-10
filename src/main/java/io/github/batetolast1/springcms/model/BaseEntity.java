@@ -14,8 +14,10 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "created_on")
+
+    @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
+
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
 
