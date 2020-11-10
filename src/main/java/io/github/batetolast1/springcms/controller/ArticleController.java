@@ -9,14 +9,22 @@ import io.github.batetolast1.springcms.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/article")
 @RequiredArgsConstructor
 public class ArticleController {
+
+    public static final String LIST = "article/list";
+    public static final String LIST_REDIRECT = "redirect:/article/list";
+    public static final String DELETE = "article/delete";
+    public static final String ADD = "article/add";
+    public static final String EDIT = "article/edit";
 
     private final ArticleService articleService;
     private final AuthorService authorService;
@@ -33,46 +41,54 @@ public class ArticleController {
     }
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String displayList(Model model) {
         List<ArticleDto> articleDtos = articleService.getAll();
         model.addAttribute("articleDtos", articleDtos);
-        return "article/list";
+        return LIST;
     }
 
     @GetMapping("/confirm-delete")
-    public String delete(Model model, @RequestParam(name = "id") Long id) {
+    public String confirmDelete(Model model, @RequestParam(name = "id") Long id) {
         model.addAttribute("id", id);
-        return "article/delete";
+        return DELETE;
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(name = "id") Long id) {
+    public String processDelete(@RequestParam(name = "id") Long id) {
         articleService.delete(id);
-        return "redirect:/article/list";
+        return LIST_REDIRECT;
     }
 
     @GetMapping("/add")
-    public String form(Model model) {
+    public String displayAddForm(Model model) {
         model.addAttribute("articleDto", new ArticleDto());
-        return "article/add";
+        return ADD;
     }
 
     @PostMapping("/add")
-    public String processForm(ArticleDto articleDto) {
+    public String processAddForm(@Valid ArticleDto articleDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ADD;
+        }
+
         articleService.save(articleDto);
-        return "redirect:/article/list";
+        return LIST_REDIRECT;
     }
 
     @GetMapping("/edit")
-    public String edit(Model model, @RequestParam(name = "id") Long id) {
+    public String displayEditForm(Model model, @RequestParam(name = "id") Long id) {
         ArticleDto articleDto = articleService.getById(id);
         model.addAttribute("articleDto", articleDto);
-        return "article/edit";
+        return EDIT;
     }
 
     @PostMapping("/edit")
-    public String processEdit(ArticleDto articleDto) {
+    public String processEditForm(@Valid ArticleDto articleDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return EDIT;
+        }
+
         articleService.edit(articleDto);
-        return "redirect:/article/list";
+        return LIST_REDIRECT;
     }
 }

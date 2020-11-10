@@ -5,6 +5,7 @@
 <html lang="en">
 <head>
     <title>Add new category</title>
+    <c:import url="../fragments/head.jsp"/>
 </head>
 <body>
 
@@ -15,6 +16,7 @@
             <legend>Category data:</legend>
             <form:label path="name">Name: </form:label>
             <form:input path="name"/>
+            <form:errors path="name" cssClass="text-danger"/>
             <br/>
             <form:label path="description">Description: </form:label>
             <form:input path="description"/>

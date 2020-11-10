@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <title>Delete author</title>
+    <c:import url="../fragments/head.jsp"/>
 </head>
 <body>
 

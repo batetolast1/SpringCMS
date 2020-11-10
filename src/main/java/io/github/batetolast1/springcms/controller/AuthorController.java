@@ -5,11 +5,13 @@ import io.github.batetolast1.springcms.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,49 +19,63 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorController {
 
+    public static final String LIST = "author/list";
+    public static final String LIST_REDIRECT = "redirect:/author/list";
+    public static final String DELETE = "author/delete";
+    public static final String ADD = "author/add";
+    public static final String EDIT = "author/edit";
+
     private final AuthorService authorService;
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String displayList(Model model) {
         List<AuthorDto> authorDtos = authorService.getAll();
         model.addAttribute("authorDtos", authorDtos);
-        return "author/list";
+        return LIST;
     }
 
     @GetMapping("/confirm-delete")
-    public String delete(Model model, @RequestParam(name = "id") Long id) {
+    public String confirmDelete(Model model, @RequestParam(name = "id") Long id) {
         model.addAttribute("id", id);
-        return "author/delete";
+        return DELETE;
     }
 
     @GetMapping("/delete")
-    public String delete(@RequestParam(name = "id") Long id) {
+    public String processDelete(@RequestParam(name = "id") Long id) {
         authorService.delete(id);
-        return "redirect:/author/list";
+        return LIST_REDIRECT;
     }
 
     @GetMapping("/add")
-    public String form(Model model) {
+    public String displayAddForm(Model model) {
         model.addAttribute("authorDto", new AuthorDto());
-        return "author/add";
+        return ADD;
     }
 
     @PostMapping("/add")
-    public String processForm(AuthorDto authorDto) {
+    public String processAddForm(@Valid AuthorDto authorDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ADD;
+        }
+
         authorService.save(authorDto);
-        return "redirect:/author/list";
+        return LIST_REDIRECT;
     }
 
     @GetMapping("/edit")
-    public String edit(Model model, @RequestParam(name = "id") Long id) {
+    public String displayEditForm(Model model, @RequestParam(name = "id") Long id) {
         AuthorDto authorDto = authorService.getById(id);
         model.addAttribute("authorDto", authorDto);
-        return "author/edit";
+        return EDIT;
     }
 
     @PostMapping("/edit")
-    public String processEdit(AuthorDto authorDto) {
+    public String processEditForm(@Valid AuthorDto authorDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return EDIT;
+        }
+
         authorService.edit(authorDto);
-        return "redirect:/author/list";
+        return LIST_REDIRECT;
     }
 }

@@ -5,6 +5,7 @@
 <html lang="en">
 <head>
     <title>Edit author</title>
+    <c:import url="../fragments/head.jsp"/>
 </head>
 <body>
 
@@ -12,12 +13,14 @@
 
     <form:form modelAttribute="authorDto">
         <fieldset>
-            <legend>Category data:</legend>
+            <legend>Author data:</legend>
             <form:label path="firstName">First name: </form:label>
             <form:input path="firstName"/>
+            <form:errors path="firstName" cssClass="text-danger"/>
             <br/>
             <form:label path="lastName">Last name: </form:label>
             <form:input path="lastName"/>
+            <form:errors path="lastName" cssClass="text-danger"/>
             <br/>
             <input type="submit" value="Submit"/>
         </fieldset>
