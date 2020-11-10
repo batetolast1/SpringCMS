@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
     <title>Spring CMS - home page</title>
+    <c:import url="fragments/head.jsp"/>
 </head>
 <body>
 
