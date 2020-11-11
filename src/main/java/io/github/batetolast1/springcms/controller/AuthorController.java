@@ -65,8 +65,13 @@ public class AuthorController {
     @GetMapping("/edit")
     public String displayEditForm(Model model, @RequestParam(name = "id") Long id) {
         AuthorDto authorDto = authorService.getById(id);
-        model.addAttribute("authorDto", authorDto);
-        return EDIT;
+
+        if (authorDto != null) {
+            model.addAttribute("authorDto", authorDto);
+            return EDIT;
+        }
+
+        return LIST;
     }
 
     @PostMapping("/edit")

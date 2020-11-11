@@ -65,8 +65,13 @@ public class CategoryController {
     @GetMapping("/edit")
     public String displayEditForm(Model model, @RequestParam(name = "id") Long id) {
         CategoryDto categoryDto = categoryService.getById(id);
-        model.addAttribute("categoryDto", categoryDto);
-        return EDIT;
+
+        if (categoryDto != null) {
+            model.addAttribute("categoryDto", categoryDto);
+            return EDIT;
+        }
+
+        return LIST;
     }
 
     @PostMapping("/edit")

@@ -33,7 +33,9 @@ public class DefaultAuthorService implements AuthorService {
 
     @Override
     public void delete(Long id) {
-        authorDao.delete(id);
+        if (exists(id)) {
+            authorDao.delete(id);
+        }
     }
 
     @Override
@@ -44,13 +46,24 @@ public class DefaultAuthorService implements AuthorService {
 
     @Override
     public AuthorDto getById(Long id) {
-        Author author = authorDao.findById(id);
-        return modelMapper.map(author, AuthorDto.class);
+        if (exists(id)) {
+            Author author = authorDao.findById(id);
+            return modelMapper.map(author, AuthorDto.class);
+        }
+
+        return null;
     }
 
     @Override
     public void edit(AuthorDto authorDto) {
         Author author = modelMapper.map(authorDto, Author.class);
-        authorDao.update(author);
+
+        if (exists(author.getId())) {
+            authorDao.update(author);
+        }
+    }
+
+    private boolean exists(Long id) {
+        return authorDao.findById(id) != null;
     }
 }

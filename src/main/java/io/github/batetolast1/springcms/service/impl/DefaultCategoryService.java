@@ -33,7 +33,9 @@ public class DefaultCategoryService implements CategoryService {
 
     @Override
     public void delete(Long id) {
-        categoryDao.delete(id);
+        if (exists(id)) {
+            categoryDao.delete(id);
+        }
     }
 
     @Override
@@ -44,13 +46,24 @@ public class DefaultCategoryService implements CategoryService {
 
     @Override
     public CategoryDto getById(Long id) {
-        Category category = categoryDao.findById(id);
-        return modelMapper.map(category, CategoryDto.class);
+        if (exists(id)) {
+            Category category = categoryDao.findById(id);
+            return modelMapper.map(category, CategoryDto.class);
+        }
+
+        return null;
     }
 
     @Override
     public void edit(CategoryDto categoryDto) {
         Category category = modelMapper.map(categoryDto, Category.class);
-        categoryDao.update(category);
+
+        if (exists(category.getId())) {
+            categoryDao.update(category);
+        }
+    }
+
+    private boolean exists(Long id) {
+        return categoryDao.findById(id) != null;
     }
 }
