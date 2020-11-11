@@ -15,6 +15,7 @@
         <fieldset>
             <legend>Article data:</legend>
             <form:hidden path="id"/>
+            <form:hidden path="draft"/>
 
             <form:label path="title">Title: </form:label>
             <form:input path="title"/>
@@ -28,11 +29,11 @@
             <form:select path="authorDto" items="${authorDtos}" itemLabel="fullName" itemValue="id"/>
             <form:errors path="authorDto" cssClass="text-danger"/>
             <br/>
-            <form:label path="categoryDtos">Authors: </form:label>
+            <form:label path="categoryDtos">Categories: </form:label>
             <form:select path="categoryDtos" items="${categoryDtos}" itemLabel="name" itemValue="id" multiple="true"/>
             <form:errors path="categoryDtos" cssClass="text-danger"/>
             <br/>
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Add"/>
         </fieldset>
     </form:form>
 
