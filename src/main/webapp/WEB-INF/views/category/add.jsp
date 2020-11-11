@@ -20,8 +20,9 @@
             <br/>
             <form:label path="description">Description: </form:label>
             <form:input path="description"/>
+            <form:errors path="description" cssClass="text-danger"/>
             <br/>
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Add"/>
         </fieldset>
     </form:form>
 

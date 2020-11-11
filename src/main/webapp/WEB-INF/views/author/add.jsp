@@ -22,7 +22,7 @@
             <form:input path="lastName"/>
             <form:errors path="lastName" cssClass="text-danger"/>
             <br/>
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Add"/>
         </fieldset>
     </form:form>
 
