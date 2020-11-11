@@ -11,10 +11,10 @@ public class CategoryDto {
     private Long id;
 
     @NotBlank
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 100)
     private String name;
 
     @NotBlank
-    @Size(min = 5, max = 100)
+    @Size(min = 5, max = 200)
     private String description;
 }

@@ -13,8 +13,9 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true, of = {})
 public class Author extends BaseEntity {
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
-    @Column(name = "last_name", nullable = false)
+
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 }

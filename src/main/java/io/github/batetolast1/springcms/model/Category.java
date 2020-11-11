@@ -15,5 +15,7 @@ public class Category extends BaseEntity {
 
     @Column(columnDefinition = "VARCHAR(100) UNIQUE")
     private String name;
+
+    @Column(length = 200)
     private String description;
 }
