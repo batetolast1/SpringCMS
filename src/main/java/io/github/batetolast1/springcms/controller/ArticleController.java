@@ -6,13 +6,14 @@ import io.github.batetolast1.springcms.dto.CategoryDto;
 import io.github.batetolast1.springcms.service.ArticleService;
 import io.github.batetolast1.springcms.service.AuthorService;
 import io.github.batetolast1.springcms.service.CategoryService;
+import io.github.batetolast1.springcms.validation.groups.ArticleData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -66,7 +67,7 @@ public class ArticleController {
     }
 
     @PostMapping("/add")
-    public String processAddForm(@Valid ArticleDto articleDto, BindingResult bindingResult) {
+    public String processAddForm(@Validated(ArticleData.class) ArticleDto articleDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ADD;
         }
@@ -78,12 +79,17 @@ public class ArticleController {
     @GetMapping("/edit")
     public String displayEditForm(Model model, @RequestParam(name = "id") Long id) {
         ArticleDto articleDto = articleService.getById(id);
-        model.addAttribute("articleDto", articleDto);
-        return EDIT;
+
+        if (articleDto != null) {
+            model.addAttribute("articleDto", articleDto);
+            return EDIT;
+        }
+
+        return LIST;
     }
 
     @PostMapping("/edit")
-    public String processEditForm(@Valid ArticleDto articleDto, BindingResult bindingResult) {
+    public String processEditForm(@Validated(ArticleData.class) ArticleDto articleDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return EDIT;
         }
