@@ -1,5 +1,7 @@
 package io.github.batetolast1.springcms.dto;
 
+import io.github.batetolast1.springcms.validation.groups.ArticleData;
+import io.github.batetolast1.springcms.validation.groups.DraftData;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -15,21 +17,23 @@ public class ArticleDto {
 
     private Long id;
 
-    @NotBlank
-    @Size(min = 5, max = 200)
+    @NotBlank(groups = {DraftData.class, ArticleData.class})
+    @Size(min = 5, max = 200, groups = {DraftData.class, ArticleData.class})
     private String title;
 
-    @NotBlank
-    @Size(min = 5, max = 1000)
+    @NotBlank(groups = {DraftData.class, ArticleData.class})
+    @Size(min = 5, max = 1000, groups = {DraftData.class, ArticleData.class})
     private String content;
 
     private LocalDateTime createdOn;
 
-    @NotNull
+    @NotNull(groups = ArticleData.class)
     @Valid
     private AuthorDto authorDto;
 
-    @NotEmpty
+    @NotEmpty(groups = ArticleData.class)
     @Valid
     private Set<CategoryDto> categoryDtos;
+
+    Boolean draft;
 }

@@ -26,6 +26,9 @@ public class Article extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categorySet = new HashSet<>();
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 1000)
     private String content;
+
+    @Column(nullable = false)
+    private Boolean draft;
 }
