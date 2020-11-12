@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ArticleDao extends BaseDao<Article, Long> {
 
-    List<Article> findFirst5ByDraftFalseByOrderByCreatedOnDesc();
+    List<Article> findFirst5ByDraftFalseOrderByCreatedOnDesc();
 
     Set<Article> findAllByDraftTrue();
 }

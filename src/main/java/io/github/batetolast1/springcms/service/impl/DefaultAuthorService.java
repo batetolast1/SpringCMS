@@ -1,8 +1,8 @@
 package io.github.batetolast1.springcms.service.impl;
 
-import io.github.batetolast1.springcms.dao.AuthorDao;
 import io.github.batetolast1.springcms.dto.AuthorDto;
 import io.github.batetolast1.springcms.model.Author;
+import io.github.batetolast1.springcms.repository.AuthorRepository;
 import io.github.batetolast1.springcms.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,12 +19,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultAuthorService implements AuthorService {
 
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public List<AuthorDto> getAll() {
-        return authorDao
+        return authorRepository
                 .findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, AuthorDto.class))
@@ -34,24 +35,22 @@ public class DefaultAuthorService implements AuthorService {
     @Override
     public void delete(Long id) {
         if (exists(id)) {
-            authorDao.delete(id);
+            authorRepository.deleteById(id);
         }
     }
 
     @Override
     public void save(AuthorDto authorDto) {
         Author author = modelMapper.map(authorDto, Author.class);
-        authorDao.save(author);
+        authorRepository.save(author);
     }
 
     @Override
     public AuthorDto getById(Long id) {
-        if (exists(id)) {
-            Author author = authorDao.findById(id);
-            return modelMapper.map(author, AuthorDto.class);
-        }
-
-        return null;
+        Optional<Author> optionalAuthor = authorRepository.findById(id);
+        return optionalAuthor
+                .map(a -> modelMapper.map(a, AuthorDto.class))
+                .orElse(null);
     }
 
     @Override
@@ -59,11 +58,11 @@ public class DefaultAuthorService implements AuthorService {
         Author author = modelMapper.map(authorDto, Author.class);
 
         if (exists(author.getId())) {
-            authorDao.update(author);
+            authorRepository.save(author);
         }
     }
 
     private boolean exists(Long id) {
-        return authorDao.findById(id) != null;
+        return authorRepository.existsById(id);
     }
 }

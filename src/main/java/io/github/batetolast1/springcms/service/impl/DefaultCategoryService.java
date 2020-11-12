@@ -1,8 +1,8 @@
 package io.github.batetolast1.springcms.service.impl;
 
-import io.github.batetolast1.springcms.dao.CategoryDao;
 import io.github.batetolast1.springcms.dto.CategoryDto;
 import io.github.batetolast1.springcms.model.Category;
+import io.github.batetolast1.springcms.repository.CategoryRepository;
 import io.github.batetolast1.springcms.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,12 +19,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultCategoryService implements CategoryService {
 
-    private final CategoryDao categoryDao;
+    private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public List<CategoryDto> getAll() {
-        return categoryDao
+        return categoryRepository
                 .findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, CategoryDto.class))
@@ -34,24 +35,22 @@ public class DefaultCategoryService implements CategoryService {
     @Override
     public void delete(Long id) {
         if (exists(id)) {
-            categoryDao.delete(id);
+            categoryRepository.deleteById(id);
         }
     }
 
     @Override
     public void save(CategoryDto categoryDto) {
         Category category = modelMapper.map(categoryDto, Category.class);
-        categoryDao.save(category);
+        categoryRepository.save(category);
     }
 
     @Override
     public CategoryDto getById(Long id) {
-        if (exists(id)) {
-            Category category = categoryDao.findById(id);
-            return modelMapper.map(category, CategoryDto.class);
-        }
-
-        return null;
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        return optionalCategory
+                .map(c -> modelMapper.map(c, CategoryDto.class))
+                .orElse(null);
     }
 
     @Override
@@ -59,11 +58,11 @@ public class DefaultCategoryService implements CategoryService {
         Category category = modelMapper.map(categoryDto, Category.class);
 
         if (exists(category.getId())) {
-            categoryDao.update(category);
+            categoryRepository.save(category);
         }
     }
 
     private boolean exists(Long id) {
-        return categoryDao.findById(id) != null;
+        return categoryRepository.existsById(id);
     }
 }

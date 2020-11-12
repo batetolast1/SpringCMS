@@ -1,8 +1,8 @@
 package io.github.batetolast1.springcms.service.impl;
 
-import io.github.batetolast1.springcms.dao.ArticleDao;
 import io.github.batetolast1.springcms.dto.ArticleDto;
 import io.github.batetolast1.springcms.model.Article;
+import io.github.batetolast1.springcms.repository.ArticleRepository;
 import io.github.batetolast1.springcms.service.DraftService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,12 +19,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DefaultDraftService implements DraftService {
 
-    private final ArticleDao articleDao;
+    private final ArticleRepository articleRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public List<ArticleDto> getAll() {
-        return articleDao
+        return articleRepository
                 .findAllByDraftTrue()
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
@@ -34,7 +35,7 @@ public class DefaultDraftService implements DraftService {
     @Override
     public void delete(Long id) {
         if (existsAndIsDraft(id)) {
-            articleDao.delete(id);
+            articleRepository.deleteById(id);
         }
     }
 
@@ -42,17 +43,15 @@ public class DefaultDraftService implements DraftService {
     public void save(ArticleDto draftDto) {
         Article draft = modelMapper.map(draftDto, Article.class);
         draft.setDraft(true);
-        articleDao.save(draft);
+        articleRepository.save(draft);
     }
 
     @Override
     public ArticleDto getById(Long id) {
-        if (existsAndIsDraft(id)) {
-            Article draft = articleDao.findById(id);
-            return modelMapper.map(draft, ArticleDto.class);
-        }
-
-        return null;
+        Optional<Article> optionalDraft = articleRepository.findByIdAndDraftIsTrue(id);
+        return optionalDraft
+                .map(a -> modelMapper.map(a, ArticleDto.class))
+                .orElse(null);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class DefaultDraftService implements DraftService {
         Article draft = modelMapper.map(draftDto, Article.class);
 
         if (existsAndIsDraft(draft.getId())) {
-            articleDao.update(draft);
+            articleRepository.save(draft);
         }
     }
 
@@ -70,12 +69,11 @@ public class DefaultDraftService implements DraftService {
 
         if (existsAndIsDraft(draft.getId())) {
             draft.setDraft(false);
-            articleDao.update(draft);
+            articleRepository.save(draft);
         }
     }
 
     private boolean existsAndIsDraft(Long id) {
-        Article article = articleDao.findById(id);
-        return article != null && article.getDraft();
+        return articleRepository.findByIdAndDraftIsTrue(id).isPresent();
     }
 }

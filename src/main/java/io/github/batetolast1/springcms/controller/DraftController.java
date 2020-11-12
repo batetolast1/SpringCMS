@@ -3,7 +3,6 @@ package io.github.batetolast1.springcms.controller;
 import io.github.batetolast1.springcms.dto.ArticleDto;
 import io.github.batetolast1.springcms.dto.AuthorDto;
 import io.github.batetolast1.springcms.dto.CategoryDto;
-import io.github.batetolast1.springcms.service.ArticleService;
 import io.github.batetolast1.springcms.service.AuthorService;
 import io.github.batetolast1.springcms.service.CategoryService;
 import io.github.batetolast1.springcms.service.DraftService;

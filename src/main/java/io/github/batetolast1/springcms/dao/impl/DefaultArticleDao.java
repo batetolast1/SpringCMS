@@ -48,7 +48,7 @@ public class DefaultArticleDao implements ArticleDao {
     }
 
     @Override
-    public List<Article> findFirst5ByDraftFalseByOrderByCreatedOnDesc() {
+    public List<Article> findFirst5ByDraftFalseOrderByCreatedOnDesc() {
         return entityManager
                 .createQuery("SELECT a FROM Article a WHERE a.draft = false ORDER BY a.createdOn DESC", Article.class)
                 .setMaxResults(5)
