@@ -9,6 +9,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "articles")
+@NamedEntityGraph(name = "Article.allFields",
+        attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("categories")}
+)
 @Data
 @EqualsAndHashCode(callSuper = true, of = {})
 public class Article extends BaseEntity {
@@ -24,7 +27,7 @@ public class Article extends BaseEntity {
     @JoinTable(name = "article_categories",
             joinColumns = @JoinColumn(name = "article_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categorySet = new HashSet<>();
+    private Set<Category> categories = new HashSet<>();
 
     @Column(length = 1000)
     private String content;

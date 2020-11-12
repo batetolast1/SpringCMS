@@ -43,11 +43,11 @@ public class BeansConfig {
 
         TypeMap<Article, ArticleDto> articleToArticleDtoTypeMap = modelMapper.createTypeMap(Article.class, ArticleDto.class);
         articleToArticleDtoTypeMap.addMapping(Article::getAuthor, ArticleDto::setAuthorDto);
-        articleToArticleDtoTypeMap.addMapping(Article::getCategorySet, ArticleDto::setCategoryDtos);
+        articleToArticleDtoTypeMap.addMapping(Article::getCategories, ArticleDto::setCategoryDtos);
 
         TypeMap<ArticleDto, Article> articleDtoToArticleTypeMap = modelMapper.createTypeMap(ArticleDto.class, Article.class);
         articleDtoToArticleTypeMap.addMapping(ArticleDto::getAuthorDto, Article::setAuthor);
-        articleDtoToArticleTypeMap.addMapping(ArticleDto::getCategoryDtos, Article::setCategorySet);
+        articleDtoToArticleTypeMap.addMapping(ArticleDto::getCategoryDtos, Article::setCategories);
 
         return modelMapper;
     }

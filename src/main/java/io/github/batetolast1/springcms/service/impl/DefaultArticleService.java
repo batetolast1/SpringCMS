@@ -52,7 +52,7 @@ public class DefaultArticleService implements ArticleService {
         }
 
         return articleRepository
-                .findAllByDraftFalseAndCategorySetContaining(optionalCategory.get())
+                .findAllByDraftFalseAndCategoriesContaining(optionalCategory.get())
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
                 .sorted(Comparator.comparing(ArticleDto::getCreatedOn).reversed())
