@@ -7,7 +7,9 @@ CREATE DATABASE spring_cms
 CREATE TABLE article_categories
 (
     article_id  bigint NOT NULL,
-    category_id bigint NOT NULL
+    category_id bigint NOT NULL,
+    PRIMARY KEY (article_id,
+                 category_id)
 ) ENGINE = InnoDB;
 
 
@@ -16,7 +18,8 @@ CREATE TABLE articles
     id         bigint NOT NULL AUTO_INCREMENT,
     created_on datetime(6),
     updated_on datetime(6),
-    content    TEXT,
+    content    varchar(1000),
+    draft      bit    NOT NULL,
     title      varchar(200),
     author_id  bigint,
     PRIMARY KEY (id)
@@ -28,8 +31,8 @@ CREATE TABLE authors
     id         bigint       NOT NULL AUTO_INCREMENT,
     created_on datetime(6),
     updated_on datetime(6),
-    first_name varchar(255) NOT NULL,
-    last_name  varchar(255) NOT NULL,
+    first_name varchar(100) NOT NULL,
+    last_name  varchar(100) NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
@@ -39,7 +42,7 @@ CREATE TABLE categories
     id          bigint NOT NULL AUTO_INCREMENT,
     created_on  datetime(6),
     updated_on  datetime(6),
-    description varchar(255),
+    description varchar(200),
     name        VARCHAR(100) UNIQUE,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
@@ -61,21 +64,24 @@ ALTER TABLE articles
 
 INSERT INTO authors(created_on, first_name, last_name)
 VALUES (NOW(), 'Adam', 'Anthem'),
-       (NOW(), 'Ben', 'Bobbins'),
-       (NOW(), 'Cedric', 'Corgi');
+       (DATE_SUB(NOW(), INTERVAL 1 DAY), 'Ben', 'Bobbins'),
+       (DATE_SUB(NOW(), INTERVAL 2 DAY), 'Cedric', 'Corgi');
 
 INSERT INTO categories(created_on, name, description)
 VALUES (NOW(), 'sport', 'news about sport events'),
-       (NOW(), 'politics', 'things that really matter'),
-       (NOW(), 'health', 'it\'s all about covid now');
+       (DATE_SUB(NOW(), INTERVAL 1 DAY), 'politics', 'things that really matter'),
+       (DATE_SUB(NOW(), INTERVAL 2 DAY), 'health', 'it\'s all about covid now');
 
-INSERT INTO articles(created_on, content, title, author_id)
-VALUES (NOW(), 'article 1 content', 'article 1 title', 1),
-       (NOW(), 'article 2 content', 'article 2 title', 2),
-       (NOW(), 'article 3 content', 'article 3 title', 1),
-       (NOW(), 'article 4 content', 'article 4 title', 1),
-       (NOW(), 'article 5 content', 'article 5 title', 2),
-       (NOW(), 'article 6 content', 'article 6 title', 1);
+INSERT INTO articles(created_on, content, title, author_id, draft)
+VALUES (NOW(), 'article 1 content', 'article 1 title', 1, TRUE),
+       (DATE_SUB(NOW(), INTERVAL 1 DAY), 'article 2 content', 'article 2 title', 2, FALSE),
+       (DATE_SUB(NOW(), INTERVAL 2 DAY), 'article 3 content', 'article 3 title', 1, FALSE),
+       (DATE_SUB(NOW(), INTERVAL 3 DAY), 'article 4 content', 'article 4 title', 3, FALSE),
+       (DATE_SUB(NOW(), INTERVAL 4 DAY), 'article 5 content', 'article 5 title', 2, FALSE),
+       (DATE_SUB(NOW(), INTERVAL 5 DAY), 'article 6 content', 'article 6 title', 1, FALSE),
+       (NOW(), 'draft 1 content', 'draft 1 title', 1, TRUE),
+       (DATE_SUB(NOW(), INTERVAL 1 DAY), 'draft 2 content', 'draft 2 title', 2, TRUE),
+       (DATE_SUB(NOW(), INTERVAL 2 DAY), 'draft 3 content', 'draft 3 title', 1, TRUE);
 
 INSERT INTO article_categories
 VALUES (1, 1),
