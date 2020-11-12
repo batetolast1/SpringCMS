@@ -1,6 +1,7 @@
 package io.github.batetolast1.springcms.repository;
 
 import io.github.batetolast1.springcms.model.Article;
+import io.github.batetolast1.springcms.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByIdAndDraftIsFalse(Long id);
 
     Optional<Article> findByIdAndDraftIsTrue(Long id);
+
+    Set<Article> findAllByDraftFalseAndCategorySetContaining(Category category);
 }

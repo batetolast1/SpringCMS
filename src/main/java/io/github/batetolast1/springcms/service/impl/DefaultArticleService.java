@@ -2,16 +2,16 @@ package io.github.batetolast1.springcms.service.impl;
 
 import io.github.batetolast1.springcms.dto.ArticleDto;
 import io.github.batetolast1.springcms.model.Article;
+import io.github.batetolast1.springcms.model.Category;
 import io.github.batetolast1.springcms.repository.ArticleRepository;
+import io.github.batetolast1.springcms.repository.CategoryRepository;
 import io.github.batetolast1.springcms.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class DefaultArticleService implements ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -36,6 +37,22 @@ public class DefaultArticleService implements ArticleService {
     public List<ArticleDto> getAll() {
         return articleRepository
                 .findAllByDraftFalse()
+                .stream()
+                .map(a -> modelMapper.map(a, ArticleDto.class))
+                .sorted(Comparator.comparing(ArticleDto::getCreatedOn).reversed())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArticleDto> getAllByCategoryId(Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+
+        if (optionalCategory.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return articleRepository
+                .findAllByDraftFalseAndCategorySetContaining(optionalCategory.get())
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
                 .sorted(Comparator.comparing(ArticleDto::getCreatedOn).reversed())

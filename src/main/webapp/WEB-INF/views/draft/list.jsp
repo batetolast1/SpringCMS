@@ -29,7 +29,7 @@
                 <td><c:out value="${draft.authorDto.fullName}"/></td>
                 <td>
                     <c:forEach var="category" items="${draft.categoryDtos}">
-                        ${category.name},
+                        <c:out value="${category.name}"/>,
                     </c:forEach>
                 </td>
                 <td>

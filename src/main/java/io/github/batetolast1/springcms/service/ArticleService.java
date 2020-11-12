@@ -10,6 +10,8 @@ public interface ArticleService {
 
     List<ArticleDto> getAll();
 
+    List<ArticleDto> getAllByCategoryId(Long id);
+
     void delete(Long id);
 
     void save(ArticleDto articleDto);

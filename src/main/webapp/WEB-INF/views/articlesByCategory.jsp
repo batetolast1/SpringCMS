@@ -3,12 +3,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Spring CMS - home page</title>
+    <title>Articles by category</title>
     <c:import url="fragments/head.jsp"/>
 </head>
 <body>
 
     <c:import url="fragments/header.jsp"/>
+
+    <h2>Articles by category <c:out value="${categoryDto.name}"/></h2>
 
     <table>
         <tr>
@@ -16,19 +18,13 @@
             <th>Title</th>
             <th>Content</th>
             <th>Created on</th>
-            <th>Categories</th>
         </tr>
-        <c:forEach var="article" items="${articleDtos}" varStatus="index">
+        <c:forEach var="article" items="${articleDtosByCategory}" varStatus="index">
             <tr>
                 <td><c:out value="${index.index + 1}"/></td>
                 <td><c:out value="${article.title}"/></td>
                 <td><c:out value="${article.content}"/></td>
                 <td><c:out value="${article.createdOn}"/></td>
-                <td>
-                    <c:forEach var="category" items="${article.categoryDtos}">
-                        <a href="/articles-by-category?id=<c:out value="${category.id}"/>">${category.name}</a>,
-                    </c:forEach>
-                </td>
             </tr>
         </c:forEach>
     </table>
