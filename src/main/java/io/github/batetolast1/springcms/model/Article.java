@@ -32,6 +32,13 @@ public class Article extends BaseEntity {
     @Column(length = 1000)
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private Boolean draft;
+
+    @PrePersist
+    @PreUpdate
+    public void trim() {
+        this.title = this.title.trim();
+        this.content = this.content.trim();
+    }
 }

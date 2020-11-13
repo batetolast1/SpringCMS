@@ -2,6 +2,7 @@ package io.github.batetolast1.springcms.service.impl;
 
 import io.github.batetolast1.springcms.dto.ArticleDto;
 import io.github.batetolast1.springcms.model.Article;
+import io.github.batetolast1.springcms.model.enums.EntityType;
 import io.github.batetolast1.springcms.repository.ArticleRepository;
 import io.github.batetolast1.springcms.service.DraftService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class DefaultDraftService implements DraftService {
     @Override
     public List<ArticleDto> getAll() {
         return articleRepository
-                .findAllByDraftTrue()
+                .findAllByDraftTrueAndEntityType(EntityType.ACTIVE)
                 .stream()
                 .map(a -> modelMapper.map(a, ArticleDto.class))
                 .sorted(Comparator.comparing(ArticleDto::getCreatedOn))
@@ -34,7 +35,7 @@ public class DefaultDraftService implements DraftService {
 
     @Override
     public void delete(Long id) {
-        if (existsAndIsDraft(id)) {
+        if (existsAndIsDraftAndIsActive(id)) {
             articleRepository.deleteById(id);
         }
     }
@@ -48,7 +49,7 @@ public class DefaultDraftService implements DraftService {
 
     @Override
     public ArticleDto getById(Long id) {
-        Optional<Article> optionalDraft = articleRepository.findByIdAndDraftIsTrue(id);
+        Optional<Article> optionalDraft = articleRepository.findByIdAndDraftTrueAndEntityType(id, EntityType.ACTIVE);
         return optionalDraft
                 .map(a -> modelMapper.map(a, ArticleDto.class))
                 .orElse(null);
@@ -58,7 +59,7 @@ public class DefaultDraftService implements DraftService {
     public void edit(ArticleDto draftDto) {
         Article draft = modelMapper.map(draftDto, Article.class);
 
-        if (existsAndIsDraft(draft.getId())) {
+        if (existsAndIsDraftAndIsActive(draft.getId())) {
             articleRepository.save(draft);
         }
     }
@@ -67,13 +68,13 @@ public class DefaultDraftService implements DraftService {
     public void publish(ArticleDto draftDto) {
         Article draft = modelMapper.map(draftDto, Article.class);
 
-        if (existsAndIsDraft(draft.getId())) {
+        if (existsAndIsDraftAndIsActive(draft.getId())) {
             draft.setDraft(false);
             articleRepository.save(draft);
         }
     }
 
-    private boolean existsAndIsDraft(Long id) {
-        return articleRepository.findByIdAndDraftIsTrue(id).isPresent();
+    private boolean existsAndIsDraftAndIsActive(Long id) {
+        return articleRepository.existsByIdAndDraftTrueAndEntityType(id, EntityType.ACTIVE);
     }
 }
