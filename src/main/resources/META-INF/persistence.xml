@@ -14,18 +14,29 @@
             <property name="javax.persistence.jdbc.password" value="coderslab"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
+            <!-- disable generating database on launch -->
+
+            <property name="javax.persistence.schema-generation.database.action" value="none"/>
+
             <!-- automatic table generation in Hibernate -->
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
+            <!-- default Hibernate logger (using Logback instead) -->
+
+            <!--<property name="hibernate.show_sql" value="true" />-->
+            <!--<property name="hibernate.format_sql" value="true" />-->
+
             <!-- setting InnoDB engine and UTF-8 encoding for DB -->
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
             <property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.CharSet" value="utf8"/>
 
-            <!-- loading sample data to DB from data.sql
+            <!-- loading sample data to DB from data.sql -->
 
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/data.sql"/> -->
+            <!--<property name="javax.persistence.sql-load-script-source" value="META-INF/sql/data.sql"/>-->
 
         </properties>
     </persistence-unit>
